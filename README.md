@@ -19,11 +19,15 @@ The notebook scores Earth-Bench with its published metrics, through the `agentic
 - How an LLM judge's verdict is reported together with the score
 - How to write a LangGraph agent and run it through the same harness
 
+
+
 ## Resources
 
 - `eval_agents_handson.ipynb`: the hands-on notebook
 - [agentic-evals](https://github.com/eve-esa/agents-evals): the evaluation harness the notebook uses
 - [Earth-Bench](https://arxiv.org/abs/2509.23141) (Feng et al., ICLR 2026): the benchmark scored in Part 3
+
+
 
 ## Folder Contents
 
@@ -35,7 +39,6 @@ The notebook scores Earth-Bench with its published metrics, through the `agentic
 ├── figures/                    # figures used in the notebook
 ├── requirements.txt            # agentic-evals, pinned to a git branch
 ├── setup.sh                    # creates .venv, registers the kernel, copies .env
-├── sagemaker_on_start.sh       # optional SageMaker OnStart hook
 ├── .env.example                # credentials template, copied to .env
 ├── .env                        # your credentials (not committed)
 ├── data/                       # benchmark rasters, downloaded on first run
@@ -43,76 +46,28 @@ The notebook scores Earth-Bench with its published metrics, through the `agentic
 └── runs/                       # tool output
 ```
 
-## Prerequisites
+## Access the Lab
 
-- [uv](https://docs.astral.sh/uv/), used by `setup.sh`
-- A Jupyter environment: JupyterLab, VS Code notebooks, or a SageMaker notebook instance
-- An EVE API key and endpoint for the model under test
-
-## Environment Setup
-
-This folder is a closed environment. It has its own virtualenv and its own `.env`, and it does not share the `.venv` of the agentic-evals checkout.
-
-From this folder, on the SageMaker notebook instance:
-
-```bash
-bash setup.sh
-```
-
-`setup.sh` creates `.venv` with uv, installs `requirements.txt` (which includes `agentic-evals` with its Earth-Bench extra, from GitHub), registers the Jupyter kernel `agentic-evals workshop`, and copies `.env.example` to `.env` when `.env` is missing.
-
-The library is pinned in `requirements.txt` to the `feat/workshop-notebook` branch of `https://github.com/eve-esa/agents-evals`. The notebook's install cell is commented out, because the lab already provides the environment.
-
-Fill in `.env`:
-
-- `EVE_API_KEY`
-- `EVE_BASE_URL`
-- `MODEL_NAME` (the id the endpoint lists on `GET /models`)
-
-`WANDB_MODE=disabled` is set in `.env.example`, so a workshop run is not uploaded.
-
-### On a SageMaker notebook instance
-
-Keep this folder under `~/SageMaker`. That directory is the instance's persistent volume, so `.venv`, `.env`, `data/` and `runs/` survive a restart.
-
-To build the environment automatically when the instance starts, attach `sagemaker_on_start.sh` as an OnStart lifecycle configuration. From a machine with the AWS CLI (`base64 -w0` on Linux, `base64 -i` on macOS, both without a line break):
-
-```bash
-aws sagemaker create-notebook-instance-lifecycle-config \
-  --notebook-instance-lifecycle-config-name bifold-setup \
-  --on-start Content=$(base64 -w0 sagemaker_on_start.sh)
-aws sagemaker update-notebook-instance \
-  --notebook-instance-name <your-instance> \
-  --lifecycle-config-name bifold-setup    # the instance must be stopped
-```
-
-The hook starts `setup.sh` in the background and logs to `~/bifold-setup.log`. The first build takes several minutes and writes `.env` early. The kernel `agentic-evals workshop` appears in the launcher when `setup.sh` finishes.
-
-Rasters download into `data/` the first time the notebook reaches that cell. Logs go to `logs/`, tool output to `runs/`. Those directories stay in this folder.
+During the workshop you receive a username and a password. Log in at [https://eo-agents-eval.lab.eve-chat.chat](https://eo-agents-eval.lab.eve-chat.chat) with those credentials. The lab already provides the environment and the kernel `agentic-evals workshop`, so you can go straight to [Run the Notebook](#run-the-notebook).
 
 ## Run the Notebook
 
-1. Start Jupyter with this folder as the working directory, and select the kernel `agentic-evals workshop`:
+Open `eval_agents_handson.ipynb` and select the kernel `agentic-evals workshop`:
 
-   ```bash
-   .venv/bin/jupyter notebook eval_agents_handson.ipynb
-   ```
-
-2. Run the cells in order. If you restart the kernel, run the setup cell again.
-3. The notebook has three parts:
-   - Part 1. Metrics for agents
-   - Part 2. EO benchmarks for agents
-   - Part 3. The evaluation framework, and a real Earth-Bench run
-4. The same baseline as a run config: `configs/earth_bench/workshop_eve.yaml` in the agentic-evals repository.
+1. Run the cells in order. If you restart the kernel, run the setup cell again.
+2. The notebook has three parts:
+  - Part 1. Metrics for agents
+  - Part 2. EO benchmarks for agents
+  - Part 3. The evaluation framework, and a real Earth-Bench run
+3. The same baseline as a run config: `configs/earth_bench/workshop_eve.yaml` in the agentic-evals repository.
 
 ## Troubleshooting
 
-- **`401` or `403` from the model**: check `EVE_API_KEY` and `EVE_BASE_URL` in `.env`.
-- **`404 model not found`**: check `MODEL_NAME`.
-- **`BudgetExceeded`**: the key's token budget is spent. Ask the organisers for a key with budget. A full pass of the notebook uses about 1.8M tokens.
-- **`RateLimitError` or HTTP 429**: the endpoint is busy. `run()` retries; if it persists, lower `max_samples`.
-- **Wrong kernel or `ModuleNotFoundError`**: select `agentic-evals workshop`, restart the kernel, and run the setup cell again.
-- **Many `tool_errors`**: read the trace with `show_trace`. Usually the model invented a file path.
+- `401` **or** `403` **from the model**: check `EVE_API_KEY` and `EVE_BASE_URL` in `.env`.
+- `404 model not found`: check `MODEL_NAME`.
+- `BudgetExceeded`: the key's token budget is spent. Ask the organisers for a key with budget. A full pass of the notebook uses about 1.8M tokens.
+- `RateLimitError` **or HTTP 429**: the endpoint is busy. `run()` retries; if it persists, lower `max_samples`.
+- **Wrong kernel or** `ModuleNotFoundError`: select `agentic-evals workshop`, restart the kernel, and run the setup cell again.
 
 ## Funding
 
@@ -133,3 +88,4 @@ If you use this material in academic or research settings, please cite:
       url={https://arxiv.org/abs/2604.13071}, 
 }
 ```
+
