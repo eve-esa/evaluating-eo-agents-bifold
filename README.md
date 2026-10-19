@@ -4,6 +4,11 @@ Hands-on session of the [BIFOLD Agentic AI for Earth Observation workshop](https
 
 In this folder we find the material for **"How do you know your agent works?"**, the hands-on notebook `eval_agents_handson.ipynb`.
 
+> [!IMPORTANT]
+> **Workshop lab login (SageMaker): [https://eo-agents-eval.lab.eve-chat.chat](https://eo-agents-eval.lab.eve-chat.chat)**
+>
+> Log in with the username and password you receive during the workshop. See [Access the Lab](#access-the-lab).
+
 ## Session
 
 Building an agent is straightforward. Showing that it works reliably is harder. In this session you evaluate an Earth Observation agent from end to end. You learn the step-by-step and end-to-end metrics, survey the EO agent benchmarks, and run a baseline agent on Earth-Bench with EVE. Then you read its execution traces, diagnose its failures, and try a change of your own.
@@ -48,7 +53,11 @@ The notebook scores Earth-Bench with its published metrics, through the `agentic
 
 ## Access the Lab
 
-During the workshop you receive a username and a password. Log in at [https://eo-agents-eval.lab.eve-chat.chat](https://eo-agents-eval.lab.eve-chat.chat) with those credentials. The lab already provides the environment and the kernel `agentic-evals workshop`, so you can go straight to [Run the Notebook](#run-the-notebook).
+The lab is a SageMaker environment. During the workshop you receive a username and a password.
+
+### Log in: [https://eo-agents-eval.lab.eve-chat.chat](https://eo-agents-eval.lab.eve-chat.chat)
+
+The lab already provides the environment and the kernel `agentic-evals workshop`, so you can go straight to [Run the Notebook](#run-the-notebook).
 
 ## Run the Notebook
 
